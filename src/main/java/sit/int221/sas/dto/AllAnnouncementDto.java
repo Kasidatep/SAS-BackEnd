@@ -10,6 +10,8 @@ import sit.int221.sas.entities.Category;
 import sit.int221.sas.utils.AnnouncementDisplayEnum;
 import sit.int221.sas.utils.DateConvertFormat;
 
+import java.time.ZonedDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,20 +20,13 @@ public class AllAnnouncementDto {
         @Id
         private Integer id;
         private String announcementTitle;
-        private String publishDate;
-        private String closeDate;
+        private ZonedDateTime publishDate;
+        private ZonedDateTime closeDate;
         private AnnouncementDisplayEnum announcementDisplay;
         @JsonIgnore
         private Category category;
         public String getAnnouncementCategory() {
             return category.getCategoryName();
-        }
-
-        public String getPublishDate() {
-                return DateConvertFormat.sqlToJson(publishDate);
-        }
-        public String getCloseDate() {
-                return DateConvertFormat.sqlToJson(closeDate);
         }
 
 }

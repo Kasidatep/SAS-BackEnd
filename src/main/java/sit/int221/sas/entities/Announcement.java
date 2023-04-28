@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import sit.int221.sas.utils.AnnouncementDisplayEnum;
 
+import java.time.ZonedDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,8 +21,8 @@ public class Announcement {
     private Integer id;
     private String announcementTitle;
     private String announcementDescription;
-    private String publishDate;
-    private String closeDate;
+    private ZonedDateTime publishDate;
+    private ZonedDateTime closeDate;
     @Enumerated(EnumType.STRING)
     @Column(name = "announcementDisplay")
     private AnnouncementDisplayEnum announcementDisplay;
