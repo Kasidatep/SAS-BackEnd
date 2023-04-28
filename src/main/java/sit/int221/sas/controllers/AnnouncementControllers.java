@@ -2,8 +2,8 @@ package sit.int221.sas.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import sit.int221.sas.dto.AllAnnouncement;
-import sit.int221.sas.dto.AnnouncementDetail;
+import sit.int221.sas.dto.AllAnnouncementDto;
+import sit.int221.sas.dto.AnnouncementDetailDto;
 import sit.int221.sas.services.AnnouncementService;
 
 import java.util.List;
@@ -16,12 +16,12 @@ public class AnnouncementControllers {
     private AnnouncementService announcementService;
 
     @GetMapping("")
-    public List<AllAnnouncement> getAllAnnouncements(){
+    public List<AllAnnouncementDto> getAllAnnouncements(){
         return announcementService.getAllAnnouncements();
     }
 
     @GetMapping("/{id}")
-    public AnnouncementDetail getAnnouncementById(@PathVariable Integer id){
+    public AnnouncementDetailDto getAnnouncementById(@PathVariable Integer id){
         return announcementService.getAnnouncementById(id);
     }
 }

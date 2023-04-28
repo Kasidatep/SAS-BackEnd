@@ -1,5 +1,5 @@
 package sit.int221.sas.utils;
 
-public enum AnnouncementDisplay {
+public enum AnnouncementDisplayEnum {
     Y,N
 }

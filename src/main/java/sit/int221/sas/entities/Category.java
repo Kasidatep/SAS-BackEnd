@@ -1,5 +1,6 @@
 package sit.int221.sas.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -16,6 +17,7 @@ import lombok.Setter;
 @Table(name="category")
 public class Category {
     @Id
-    private Integer categoryId;
+    @Column(name = "categoryId")
+    private Integer id;
     private String categoryName;
 }

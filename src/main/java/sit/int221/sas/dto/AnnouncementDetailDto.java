@@ -2,27 +2,25 @@ package sit.int221.sas.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import sit.int221.sas.entities.Category;
-import sit.int221.sas.utils.AnnouncementDisplay;
+import sit.int221.sas.utils.AnnouncementDisplayEnum;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AnnouncementDetail {
+public class AnnouncementDetailDto {
         @Id
         private Integer id;
         private String announcementTitle;
         private String announcementDescription;
         private String publishDate;
         private String closeDate;
-        private AnnouncementDisplay announcementDisplay;
+        private AnnouncementDisplayEnum announcementDisplay;
         @JsonIgnore
         private Category category;
         public String getAnnouncementCategory() {

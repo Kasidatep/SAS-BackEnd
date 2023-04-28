@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import sit.int221.sas.utils.AnnouncementDisplay;
+import sit.int221.sas.utils.AnnouncementDisplayEnum;
 
 @Getter
 @Setter
@@ -23,7 +23,7 @@ public class Announcement {
     private String closeDate;
     @Enumerated(EnumType.STRING)
     @Column(name = "announcementDisplay")
-    private AnnouncementDisplay announcementDisplay;
+    private AnnouncementDisplayEnum announcementDisplay;
     @ManyToOne
     @JoinColumn(name = "categoryId")
     private Category category;

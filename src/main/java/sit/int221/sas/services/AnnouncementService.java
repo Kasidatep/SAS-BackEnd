@@ -6,8 +6,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import sit.int221.sas.dto.AllAnnouncement;
-import sit.int221.sas.dto.AnnouncementDetail;
+import sit.int221.sas.dto.AllAnnouncementDto;
+import sit.int221.sas.dto.AnnouncementDetailDto;
 import sit.int221.sas.entities.Announcement;
 import sit.int221.sas.repositories.AnnouncementRepository;
 
@@ -21,14 +21,14 @@ public class AnnouncementService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<AllAnnouncement> getAllAnnouncements() {
+    public List<AllAnnouncementDto> getAllAnnouncements() {
         Sort sort = Sort.by("id").descending();
         List<Announcement> announcements = announcementRepository.findAll(sort);
-        return announcements.stream().map(c -> modelMapper.map(c, AllAnnouncement.class)).collect(Collectors.toList());
+        return announcements.stream().map(c -> modelMapper.map(c, AllAnnouncementDto.class)).collect(Collectors.toList());
     }
 
-    public AnnouncementDetail getAnnouncementById(Integer id) {
+    public AnnouncementDetailDto getAnnouncementById(Integer id) {
         Announcement announcement = announcementRepository.findById(id).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "Announcement ID " + id + " DO NOT EXIST !!"));
-        return modelMapper.map(announcement, AnnouncementDetail.class);
+        return modelMapper.map(announcement, AnnouncementDetailDto.class);
     }
 }
