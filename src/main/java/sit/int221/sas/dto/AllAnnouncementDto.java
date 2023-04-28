@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import sit.int221.sas.entities.Category;
 import sit.int221.sas.utils.AnnouncementDisplayEnum;
+import sit.int221.sas.utils.DateConvertFormat;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,6 +25,13 @@ public class AllAnnouncementDto {
         private Category category;
         public String getAnnouncementCategory() {
             return category.getCategoryName();
+        }
+
+        public String getPublishDate() {
+                return DateConvertFormat.sqlToJson(publishDate);
+        }
+        public String getCloseDate() {
+                return DateConvertFormat.sqlToJson(closeDate);
         }
 
 }
