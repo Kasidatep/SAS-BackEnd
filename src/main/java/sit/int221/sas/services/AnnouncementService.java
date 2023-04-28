@@ -30,7 +30,7 @@ public class AnnouncementService {
     }
 
     public AnnouncementDetailDto getAnnouncementById(Integer id) {
-        Announcement announcement = announcementRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"'Announcement id" +id +"does not exist"));
+        Announcement announcement = announcementRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Announcement id " + id +" does not exist"));
         return modelMapper.map(announcement, AnnouncementDetailDto.class);
     }
 }

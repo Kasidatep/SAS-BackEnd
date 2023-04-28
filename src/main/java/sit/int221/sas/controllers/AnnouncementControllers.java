@@ -24,4 +24,6 @@ public class AnnouncementControllers {
     public AnnouncementDetailDto getAnnouncementById(@PathVariable Integer id){
         return announcementService.getAnnouncementById(id);
     }
+
+
 }
