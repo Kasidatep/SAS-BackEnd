@@ -4,8 +4,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.ResponseStatusException;
 import sit.int221.sas.dto.AllAnnouncementDto;
 import sit.int221.sas.dto.AnnouncementDetailDto;
 import sit.int221.sas.entities.Announcement;
@@ -28,7 +30,7 @@ public class AnnouncementService {
     }
 
     public AnnouncementDetailDto getAnnouncementById(Integer id) {
-        Announcement announcement = announcementRepository.findById(id).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "Announcement ID " + id + " DO NOT EXIST !!"));
+        Announcement announcement = announcementRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"ID is not exist"));
         return modelMapper.map(announcement, AnnouncementDetailDto.class);
     }
 }
