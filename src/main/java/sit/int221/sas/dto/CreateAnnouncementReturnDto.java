@@ -16,7 +16,6 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateAnnouncementReturnDto {
-        @Id
         private Integer id;
         private String announcementTitle;
         private String announcementDescription;

@@ -53,7 +53,6 @@ public class AnnouncementService {
         newAnnouncement.setCloseDate(announcement.getCloseDate());
         newAnnouncement.setAnnouncementDisplay(announcement.getAnnouncementDisplay());
         newAnnouncement.setCategory(category);
-
         return modelMapper.map(announcementRepository.saveAndFlush(newAnnouncement),CreateAnnouncementReturnDto.class);
     }
 
