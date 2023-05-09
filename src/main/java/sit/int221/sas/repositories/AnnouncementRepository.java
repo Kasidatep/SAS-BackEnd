@@ -12,8 +12,7 @@ import java.util.List;
 
 @Repository
 public interface AnnouncementRepository extends JpaRepository<Announcement, Integer> {
-    List<Announcement> findAllByCategory(String category);
-
+    // List<Announcement> findAllByCategory(String category);
 
     @Query("SELECT e FROM Announcement e WHERE "
             + "e.announcementDisplay = 'Y' AND ("
@@ -22,9 +21,7 @@ public interface AnnouncementRepository extends JpaRepository<Announcement, Inte
             + "OR (e.publishDate <= :now AND e.closeDate IS NULL) "
             + "OR (e.publishDate <= :now AND e.closeDate >= :now))")
     Page<Announcement> findActive(ZonedDateTime now, Pageable pageable);
-
     @Query("SELECT e FROM Announcement e WHERE "
             + "e.announcementDisplay = 'Y' AND e.closeDate <= :now")
     Page<Announcement> findClosed(ZonedDateTime now, Pageable pageable);
-
 }
