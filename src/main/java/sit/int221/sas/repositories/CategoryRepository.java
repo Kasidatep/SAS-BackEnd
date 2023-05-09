@@ -6,4 +6,5 @@ import sit.int221.sas.entities.Category;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
+
 }

@@ -48,7 +48,7 @@ public class AnnouncementControllers {
         announcementService.deleteAnnouncement(id);
     }
 
-    @GetMapping("/page")
+    @GetMapping("/pages")
     public PageDto<AllAnnouncementDto> getAllAnnouncementByPage(
             @RequestParam String mode,
             @RequestParam(defaultValue = "0") String page,
