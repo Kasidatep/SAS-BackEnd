@@ -20,9 +20,7 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 public class CreateAnnouncementDto {
         private Integer id;
-
         private String announcementTitle;
-
         private String announcementDescription;
         private ZonedDateTime publishDate;
         private ZonedDateTime closeDate;
@@ -40,11 +38,8 @@ public class CreateAnnouncementDto {
         public void setAnnouncementDescription(String desc){
                 if(desc.length()>10000){
                         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "too long");
-                }else{
+                } else{
                         announcementDescription= desc;
                 }
         }
-
-
-
 }
