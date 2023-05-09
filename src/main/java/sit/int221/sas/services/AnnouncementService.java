@@ -17,7 +17,9 @@ import sit.int221.sas.entities.Announcement;
 import sit.int221.sas.entities.Category;
 import sit.int221.sas.repositories.AnnouncementRepository;
 
+import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -79,15 +81,40 @@ public class AnnouncementService {
     }
 
     public PageDto<AllAnnouncementDto> getAllAnnouncementByPage(String mode, String page, String size) {
-        Pageable pageable = PageRequest.of(Integer.valueOf(page), Integer.valueOf(size), Sort.by("id").descending());
-        Page<Announcement> announcementPage = announcementRepository.findAll(pageable);
-        return toPageDTO(announcementPage, AllAnnouncementDto.class, modelMapper);
+        Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size), Sort.by("id").descending());
+        ZonedDateTime currentTime = ZonedDateTime.now();
+        if(Objects.equals(mode, "active")){
+            return toPageDTO(announcementRepository.findActive(currentTime, pageable), AllAnnouncementDto.class, modelMapper);
+        } else if(Objects.equals(mode, "close")){
+            return toPageDTO(announcementRepository.findClosed(currentTime, pageable), AllAnnouncementDto.class, modelMapper);
+        }else{
+            return toPageDTO(announcementRepository.findAll(pageable), AllAnnouncementDto.class, modelMapper);
+        }
     }
 
     public Page<Announcement> getAllAnnouncementByPageTest(String mode, String page, String size) {
         Pageable pageable = PageRequest.of(Integer.valueOf(page), Integer.valueOf(size), Sort.by("id").descending());
         return announcementRepository.findAll(pageable);
     }
+
+//    public Condition(){
+//        let t,p,c
+//                if(t===null||c===null){
+//                    console.log("not Seen")
+//                }else{
+//                if(t>=p){
+//                    console.log("Seen")
+//                }else if(t>=p||t<c){
+//                    console.log("Seen")
+//                }else if(t<c) {
+//                    console.log("Seen")
+//                }else if (t>=c){
+//                    console.log("Seen")
+//                }else{
+//                    console.log("not Seen")
+//                }
+//    }
+//    }
 
 
     // Dto Page
@@ -101,4 +128,5 @@ public class AnnouncementService {
         page.setContent(mapList(source.getContent(), targetClass, modelMapper));
         return page;
     }
+
 }
