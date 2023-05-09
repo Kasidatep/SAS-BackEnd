@@ -1,11 +1,9 @@
 package sit.int221.sas.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-import sit.int221.sas.dto.AllAnnouncementDto;
-import sit.int221.sas.dto.AnnouncementDetailDto;
-import sit.int221.sas.dto.CreateAnnouncementDto;
-import sit.int221.sas.dto.CreateAnnouncementReturnDto;
+import sit.int221.sas.dto.*;
 import sit.int221.sas.entities.Announcement;
 import sit.int221.sas.services.AnnouncementService;
 
@@ -48,5 +46,23 @@ public class AnnouncementControllers {
     @DeleteMapping("/{id}")
     public void deleteAnnouncement(@PathVariable Integer id) {
         announcementService.deleteAnnouncement(id);
+    }
+
+    @GetMapping("/page")
+    public PageDto<AllAnnouncementDto> getAllAnnouncementByPage(
+            @RequestParam String mode,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "5") Integer size
+    ) {
+        return announcementService.getAllAnnouncementByPage(mode, page, size);
+    }
+
+    @GetMapping("/page-test")
+    public Page<Announcement> getAllAnnouncementByPageTest(
+            @RequestParam String mode,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "5") Integer size
+    ) {
+        return announcementService.getAllAnnouncementByPageTest(mode, page, size);
     }
 }

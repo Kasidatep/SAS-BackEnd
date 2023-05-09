@@ -2,16 +2,16 @@ package sit.int221.sas.services;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
-import sit.int221.sas.dto.AllAnnouncementDto;
-import sit.int221.sas.dto.AnnouncementDetailDto;
-import sit.int221.sas.dto.CreateAnnouncementDto;
-import sit.int221.sas.dto.CreateAnnouncementReturnDto;
+import sit.int221.sas.dto.*;
 import sit.int221.sas.entities.Announcement;
 import sit.int221.sas.entities.Category;
 import sit.int221.sas.repositories.AnnouncementRepository;
@@ -77,4 +77,29 @@ public class AnnouncementService {
             return modelMapper.map(announcementRepository.saveAndFlush(updateAnnouncement),CreateAnnouncementReturnDto.class);
     }
 
+    public PageDto<AllAnnouncementDto> getAllAnnouncementByPage(String mode, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        Page<Announcement> announcementPage = announcementRepository.findAll(pageable);
+        return toPageDTO(announcementPage, AllAnnouncementDto.class, modelMapper);
+    }
+
+    public Page<Announcement> getAllAnnouncementByPageTest(String mode, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        return   announcementRepository.findAll(pageable);
+    }
+
+
+
+
+    // Dto Page
+    public <S, T> List<T> mapList(List<S> source,  Class<T> targetClass, ModelMapper modelMapper) {
+        return source.stream().map(entity -> modelMapper.map(entity, targetClass))
+                .collect(Collectors.toList());
+    }
+    public <S, T> PageDto<T> toPageDTO(Page<S> source, Class<T> targetClass,
+                                       ModelMapper modelMapper) {
+        PageDto<T> page = modelMapper.map(source, PageDto.class);
+        page.setContent(mapList(source.getContent(), targetClass, modelMapper));
+        return page;
+    }
 }
