@@ -1,5 +1,6 @@
 package sit.int221.sas.services;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -77,18 +78,16 @@ public class AnnouncementService {
             return modelMapper.map(announcementRepository.saveAndFlush(updateAnnouncement),CreateAnnouncementReturnDto.class);
     }
 
-    public PageDto<AllAnnouncementDto> getAllAnnouncementByPage(String mode, Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+    public PageDto<AllAnnouncementDto> getAllAnnouncementByPage(String mode, String page, String size) {
+        Pageable pageable = PageRequest.of(Integer.valueOf(page), Integer.valueOf(size), Sort.by("id").descending());
         Page<Announcement> announcementPage = announcementRepository.findAll(pageable);
         return toPageDTO(announcementPage, AllAnnouncementDto.class, modelMapper);
     }
 
-    public Page<Announcement> getAllAnnouncementByPageTest(String mode, Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-        return   announcementRepository.findAll(pageable);
+    public Page<Announcement> getAllAnnouncementByPageTest(String mode, String page, String size) {
+        Pageable pageable = PageRequest.of(Integer.valueOf(page), Integer.valueOf(size), Sort.by("id").descending());
+        return announcementRepository.findAll(pageable);
     }
-
-
 
 
     // Dto Page

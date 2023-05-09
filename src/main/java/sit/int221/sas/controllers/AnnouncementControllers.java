@@ -51,8 +51,8 @@ public class AnnouncementControllers {
     @GetMapping("/page")
     public PageDto<AllAnnouncementDto> getAllAnnouncementByPage(
             @RequestParam String mode,
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "5") Integer size
+            @RequestParam(defaultValue = "0") String page,
+            @RequestParam(defaultValue = "5") String size
     ) {
         return announcementService.getAllAnnouncementByPage(mode, page, size);
     }
@@ -60,8 +60,8 @@ public class AnnouncementControllers {
     @GetMapping("/page-test")
     public Page<Announcement> getAllAnnouncementByPageTest(
             @RequestParam String mode,
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "5") Integer size
+            @RequestParam(defaultValue = "0") String page,
+            @RequestParam(defaultValue = "5") String size
     ) {
         return announcementService.getAllAnnouncementByPageTest(mode, page, size);
     }
