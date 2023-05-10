@@ -24,8 +24,12 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
 
     public Category getCategoryById(Integer id){
-        return categoryRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Category id " + id +" does not exist"));
-    }
+        if (id != null) {
+            return categoryRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Category id " + id +" does not exist"));
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category Id cannot be null");
+        }
+      }
 
     public List<Category> getAllCategory() {
         return categoryRepository.findAll();

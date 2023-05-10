@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import sit.int221.sas.dto.*;
 import sit.int221.sas.entities.Announcement;
 import sit.int221.sas.entities.Category;
+import sit.int221.sas.exceptions.DateValidator;
 import sit.int221.sas.exceptions.EntityValidator;
 import sit.int221.sas.repositories.AnnouncementRepository;
 
@@ -34,19 +35,22 @@ public class AnnouncementService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<AllAnnouncementDto> getAllAnnouncements() {
+    public List<AllAnnouncementDto> getAllAnnouncements(String mode) {
         Sort sort = Sort.by("id").descending();
-        List<Announcement> announcements = announcementRepository.findAll(sort);
-        return announcements.stream().map(c -> modelMapper.map(c, AllAnnouncementDto.class)).collect(Collectors.toList());
+        if(Objects.equals(mode, "admin")){
+            return announcementRepository.findAll(sort).stream().map(c -> modelMapper.map(c, AllAnnouncementDto.class)).collect(Collectors.toList());
+        } else if(Objects.equals(mode, "active")){
+            return announcementRepository.findActive(ZonedDateTime.now()).stream().map(c -> modelMapper.map(c, AllAnnouncementDto.class)).collect(Collectors.toList());
+        } else if (Objects.equals(mode, "close")) {
+            return announcementRepository.findClosed(ZonedDateTime.now()).stream().map(c -> modelMapper.map(c, AllAnnouncementDto.class)).collect(Collectors.toList());
+        }else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Mode "+ mode+ " not define.");
+        }
     }
 
     public AnnouncementDetailDto getAnnouncementById(Integer id) {
         Announcement announcement = announcementRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Announcement id " + id +" does not exist"));
         return modelMapper.map(announcement, AnnouncementDetailDto.class);
-    }
-
-    public Announcement getAnnouncementById2(Integer id) {
-        return announcementRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Announcement id " + id +" does not exist"));
     }
 
     public CreateAnnouncementReturnDto addAnnouncement(CreateAnnouncementDto announcement) {
@@ -59,6 +63,7 @@ public class AnnouncementService {
         newAnnouncement.setAnnouncementDisplay(announcement.getAnnouncementDisplay());
         newAnnouncement.setCategory(category);
         EntityValidator.validateEntity(newAnnouncement);
+        DateValidator.isCorrect(announcement.getPublishDate(), announcement.getCloseDate());
         try {
             return modelMapper.map(announcementRepository.saveAndFlush(newAnnouncement),CreateAnnouncementReturnDto.class);
         } catch (DataIntegrityViolationException e) {
@@ -89,6 +94,8 @@ public class AnnouncementService {
             updateAnnouncement.setAnnouncementDisplay(announcement.getAnnouncementDisplay());
             updateAnnouncement.setCategory(category);
             EntityValidator.validateEntity(updateAnnouncement);
+            EntityValidator.validateEntity(updateAnnouncement.getCategory());
+            DateValidator.isCorrect(announcement.getPublishDate(), announcement.getCloseDate());
         try {
             return modelMapper.map(announcementRepository.saveAndFlush(updateAnnouncement),CreateAnnouncementReturnDto.class);
         } catch (DataIntegrityViolationException e) {

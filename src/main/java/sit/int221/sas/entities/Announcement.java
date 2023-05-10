@@ -2,6 +2,7 @@ package sit.int221.sas.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,6 +41,7 @@ public class Announcement {
 
     @JsonIgnore
     @ManyToOne
+    @NotNull(message = "Category can not be null")
     @JoinColumn(name = "categoryId")
     private Category category;
 }

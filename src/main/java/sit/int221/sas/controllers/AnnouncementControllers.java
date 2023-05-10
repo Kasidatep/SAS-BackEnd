@@ -8,6 +8,7 @@ import sit.int221.sas.entities.Announcement;
 import sit.int221.sas.services.AnnouncementService;
 
 import java.util.List;
+import java.util.Objects;
 
 @CrossOrigin
 @RestController
@@ -17,8 +18,8 @@ public class AnnouncementControllers {
     private AnnouncementService announcementService;
 
     @GetMapping("")
-    public List<AllAnnouncementDto> getAllAnnouncements() {
-        return announcementService.getAllAnnouncements();
+    public List<AllAnnouncementDto> getAllAnnouncements(@RequestParam(defaultValue = "admin") String mode) {
+        return announcementService.getAllAnnouncements(mode);
     }
 
     @GetMapping("/{id}")
