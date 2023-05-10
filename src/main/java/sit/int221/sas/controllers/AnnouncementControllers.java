@@ -45,12 +45,12 @@ public class AnnouncementControllers {
 
     @GetMapping("/pages")
     public PageDto<AllAnnouncementDto> getAllAnnouncementByPage(
-            @RequestParam String mode,
+            @RequestParam(defaultValue = "active") String mode,
             @RequestParam(defaultValue = "0") String page,
             @RequestParam(defaultValue = "5") String size,
             @RequestParam(defaultValue = "0") String category
     ) {
-        return announcementService.getAllAnnouncementByPage(mode, page, size);
+        return announcementService.getAllAnnouncementByPage(mode, page, size, category);
     }
 
     @GetMapping("/page-test")

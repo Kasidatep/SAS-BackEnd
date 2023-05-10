@@ -96,15 +96,26 @@ public class AnnouncementService {
         }
     }
 
-    public PageDto<AllAnnouncementDto> getAllAnnouncementByPage(String mode, String page, String size) {
+    public PageDto<AllAnnouncementDto> getAllAnnouncementByPage(String mode, String page, String size, String category) {
+        if(category.isBlank()) category = String.valueOf(0);
+        Integer categoryId = Integer.valueOf(category);
         Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size), Sort.by("id").descending());
         ZonedDateTime currentTime = ZonedDateTime.now();
         if(Objects.equals(mode, "active")){
-            return toPageDTO(announcementRepository.findActive(currentTime, pageable), AllAnnouncementDto.class, modelMapper);
+            if(categoryId==0){
+                return toPageDTO(announcementRepository.findActive(currentTime, pageable), AllAnnouncementDto.class, modelMapper);
+            }else{
+                return toPageDTO(announcementRepository.findActive(currentTime, categoryId, pageable), AllAnnouncementDto.class, modelMapper);
+            }
         } else if(Objects.equals(mode, "close")){
-            return toPageDTO(announcementRepository.findClosed(currentTime, pageable), AllAnnouncementDto.class, modelMapper);
+            if(categoryId==0){
+                return toPageDTO(announcementRepository.findClosed(currentTime, pageable), AllAnnouncementDto.class, modelMapper);
+            }else{
+                return toPageDTO(announcementRepository.findClosed(currentTime, categoryId, pageable), AllAnnouncementDto.class, modelMapper);
+            }
         }else{
-            return toPageDTO(announcementRepository.findAll(pageable), AllAnnouncementDto.class, modelMapper);
+//            return toPageDTO(announcementRepository.findAll(pageable), AllAnnouncementDto.class, modelMapper);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mode "+ mode + " not provide.");
         }
     }
 
@@ -112,25 +123,6 @@ public class AnnouncementService {
         Pageable pageable = PageRequest.of(Integer.valueOf(page), Integer.valueOf(size), Sort.by("id").descending());
         return announcementRepository.findAll(pageable);
     }
-
-//    public Condition(){
-//        let t,p,c
-//                if(t===null||c===null){
-//                    console.log("not Seen")
-//                }else{
-//                if(t>=p){
-//                    console.log("Seen")
-//                }else if(t>=p||t<c){
-//                    console.log("Seen")
-//                }else if(t<c) {
-//                    console.log("Seen")
-//                }else if (t>=c){
-//                    console.log("Seen")
-//                }else{
-//                    console.log("not Seen")
-//                }
-//    }
-//    }
 
 
     // Dto Page

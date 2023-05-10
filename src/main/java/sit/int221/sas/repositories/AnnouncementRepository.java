@@ -25,4 +25,16 @@ public interface AnnouncementRepository extends JpaRepository<Announcement, Inte
             + "e.announcementDisplay = 'Y' AND e.closeDate <= :now")
     Page<Announcement> findClosed(ZonedDateTime now, Pageable pageable);
 
+    @Query("SELECT e FROM Announcement e WHERE e.category.id = :categoryId AND "
+            + "e.announcementDisplay = 'Y' AND ("
+            + "(e.publishDate IS NULL AND e.closeDate IS NULL) "
+            + "OR (e.publishDate IS NULL AND e.closeDate >= :now) "
+            + "OR (e.publishDate <= :now AND e.closeDate IS NULL) "
+            + "OR (e.publishDate <= :now AND e.closeDate >= :now))")
+    Page<Announcement> findActive(ZonedDateTime now,Integer categoryId, Pageable pageable);
+
+    @Query("SELECT e FROM Announcement e WHERE  e.category.id = :categoryId AND "
+            + "e.announcementDisplay = 'Y' AND e.closeDate <= :now")
+    Page<Announcement> findClosed(ZonedDateTime now,Integer categoryId, Pageable pageable);
+
 }
