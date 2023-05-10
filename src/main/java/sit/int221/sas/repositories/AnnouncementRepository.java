@@ -13,8 +13,6 @@ import java.util.List;
 @Repository
 public interface AnnouncementRepository extends JpaRepository<Announcement, Integer> {
     List<Announcement> findAllByCategory(String category);
-
-
     @Query("SELECT e FROM Announcement e WHERE "
             + "e.announcementDisplay = 'Y' AND ("
             + "(e.publishDate IS NULL AND e.closeDate IS NULL) "

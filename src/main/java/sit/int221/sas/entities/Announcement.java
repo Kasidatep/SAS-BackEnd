@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotBlank;
 import sit.int221.sas.utils.AnnouncementDisplayEnum;
 
 import java.time.ZonedDateTime;
@@ -23,11 +24,14 @@ public class Announcement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "announcementTitle", nullable = false)
-    @Size(max = 200)
+    @NotBlank(message = "announcementTitle is required")
+    @Size(max = 200, message = "announcementTitle cannot be longer than 200 characters")
     private String announcementTitle;
     @Column(name = "announcementDescription", nullable = false)
-    @Size(max = 10000)
+    @NotBlank(message = "announcementDescription is required")
+    @Size(max = 10000, message = "announcementDescription cannot be longer than 10,000 characters")
     private String announcementDescription;
+
     private ZonedDateTime publishDate;
     private ZonedDateTime closeDate;
     @Enumerated(EnumType.STRING)

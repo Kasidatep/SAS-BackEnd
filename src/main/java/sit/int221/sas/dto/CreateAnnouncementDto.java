@@ -27,19 +27,4 @@ public class CreateAnnouncementDto {
         private AnnouncementDisplayEnum announcementDisplay = AnnouncementDisplayEnum.N;
         private Integer categoryId;
 
-        public void setAnnouncementTitle(String title){
-                if(title.length()>200){
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "too long");
-                }else{
-                        announcementTitle= title;
-                }
-        }
-
-        public void setAnnouncementDescription(String desc){
-                if(desc.length()>10000){
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "too long");
-                } else{
-                        announcementDescription= desc;
-                }
-        }
 }

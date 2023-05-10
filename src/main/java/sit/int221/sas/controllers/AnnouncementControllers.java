@@ -26,11 +26,6 @@ public class AnnouncementControllers {
         return announcementService.getAnnouncementById(id);
     }
 
-    @GetMapping("/test/{id}")
-    public Announcement getAnnouncementById2(@PathVariable Integer id) {
-        return announcementService.getAnnouncementById2(id);
-    }
-
     @PostMapping("")
     public CreateAnnouncementReturnDto addAnnouncement(@RequestBody CreateAnnouncementDto announcement) {
         return announcementService.addAnnouncement(announcement);
@@ -52,7 +47,8 @@ public class AnnouncementControllers {
     public PageDto<AllAnnouncementDto> getAllAnnouncementByPage(
             @RequestParam String mode,
             @RequestParam(defaultValue = "0") String page,
-            @RequestParam(defaultValue = "5") String size
+            @RequestParam(defaultValue = "5") String size,
+            @RequestParam(defaultValue = "0") String category
     ) {
         return announcementService.getAllAnnouncementByPage(mode, page, size);
     }

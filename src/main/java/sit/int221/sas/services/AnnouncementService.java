@@ -3,6 +3,7 @@ package sit.int221.sas.services;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import sit.int221.sas.dto.*;
 import sit.int221.sas.entities.Announcement;
 import sit.int221.sas.entities.Category;
+import sit.int221.sas.exceptions.EntityValidator;
 import sit.int221.sas.repositories.AnnouncementRepository;
 
 import java.time.ZonedDateTime;
@@ -56,12 +58,21 @@ public class AnnouncementService {
         newAnnouncement.setCloseDate(announcement.getCloseDate());
         newAnnouncement.setAnnouncementDisplay(announcement.getAnnouncementDisplay());
         newAnnouncement.setCategory(category);
-        return modelMapper.map(announcementRepository.saveAndFlush(newAnnouncement),CreateAnnouncementReturnDto.class);
+        EntityValidator.validateEntity(newAnnouncement);
+        try {
+            return modelMapper.map(announcementRepository.saveAndFlush(newAnnouncement),CreateAnnouncementReturnDto.class);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
     public void deleteAnnouncement(Integer id) {
         if(announcementRepository.existsById(id)){
-            announcementRepository.deleteById(id);
+            try {
+                announcementRepository.deleteById(id);
+            } catch (DataIntegrityViolationException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            }
         }else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The announcement is not found");
         }
@@ -77,7 +88,12 @@ public class AnnouncementService {
             updateAnnouncement.setCloseDate(announcement.getCloseDate());
             updateAnnouncement.setAnnouncementDisplay(announcement.getAnnouncementDisplay());
             updateAnnouncement.setCategory(category);
+            EntityValidator.validateEntity(updateAnnouncement);
+        try {
             return modelMapper.map(announcementRepository.saveAndFlush(updateAnnouncement),CreateAnnouncementReturnDto.class);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
     public PageDto<AllAnnouncementDto> getAllAnnouncementByPage(String mode, String page, String size) {
