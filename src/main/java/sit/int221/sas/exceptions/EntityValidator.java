@@ -1,24 +1,50 @@
 package sit.int221.sas.exceptions;
 
 import jakarta.validation.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@Setter @Getter @AllArgsConstructor @ToString
 public class EntityValidator {
-    public static <T> void validateEntity(T entity) throws ConstraintViolationException {
+
+    public static <T> Set<ConstraintViolation<T>> validateEntity(T entity) throws ConstraintViolationException {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<T>> violations = validator.validate(entity);
         if (!violations.isEmpty()) {
-            List<String> errors = new ArrayList<>();
+            List<ValidationError> errors = new ArrayList<>();
             for (ConstraintViolation<T> violation : violations) {
-                errors.add(violation.getMessage());
+                String field = violation.getPropertyPath().toString();
+                String message = violation.getMessage();
+                errors.add(new ValidationError(field, message));
             }
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.join(", ", errors));
+        return violations;
+        }
+        return null;
+    }
+
+    public static class ValidationError {
+        private final String field;
+        private final String errorMessage;
+
+        public ValidationError(String field, String errorMessage) {
+            this.field = field;
+            this.errorMessage = errorMessage;
+        }
+
+        public String getField() {
+            return field;
+        }
+
+        public String getErrorMessage() {
+            return errorMessage;
         }
     }
+
 }

@@ -1,6 +1,7 @@
 package sit.int221.sas.services;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
+import org.hibernate.exception.ConstraintViolationException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -62,11 +63,11 @@ public class AnnouncementService {
         newAnnouncement.setCloseDate(announcement.getCloseDate());
         newAnnouncement.setAnnouncementDisplay(announcement.getAnnouncementDisplay());
         newAnnouncement.setCategory(category);
-        EntityValidator.validateEntity(newAnnouncement);
+       // EntityValidator.validateEntity(newAnnouncement);
         DateValidator.isCorrect(announcement.getPublishDate(), announcement.getCloseDate());
         try {
             return modelMapper.map(announcementRepository.saveAndFlush(newAnnouncement),CreateAnnouncementReturnDto.class);
-        } catch (DataIntegrityViolationException e) {
+        } catch (ConstraintViolationException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

@@ -1,6 +1,10 @@
 package sit.int221.sas.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.MethodParameter;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import sit.int221.sas.dto.CreateAnnouncementDto;
 import sit.int221.sas.dto.CreateAnnouncementReturnDto;
@@ -29,7 +33,11 @@ public class CategoryController {
     }
 
     @PostMapping("")
-    public Category CategoryDTO(@RequestBody CreateCategoryDto category) {
-        return categoryservice.addCategory(category);
+    public Category CategoryDTO(@Valid  @RequestBody CreateCategoryDto category, BindingResult bindingResult) throws MethodArgumentNotValidException {
+        if (bindingResult.hasErrors()) {
+            throw new MethodArgumentNotValidException((MethodParameter) null, bindingResult);
+        }else{
+           return categoryservice.addCategory(category);
+        }
     }
 }

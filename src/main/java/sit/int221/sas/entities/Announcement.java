@@ -2,6 +2,7 @@ package sit.int221.sas.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -33,7 +34,10 @@ public class Announcement {
     @Size(max = 10000, message = "announcementDescription cannot be longer than 10,000 characters")
     private String announcementDescription;
 
+    @Future(message = "publishDate must future")
     private ZonedDateTime publishDate;
+
+    @Future(message = "closeDate must future")
     private ZonedDateTime closeDate;
     @Enumerated(EnumType.STRING)
     @Column(name = "announcementDisplay")
