@@ -8,23 +8,25 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import sit.int221.sas.utils.AnnouncementDisplayEnum;
-import sit.int221.sas.validators.PublishAndCloseDate;
+import sit.int221.sas.validators.ValidDate;
 
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Validated
+@ValidDate
 public class CreateAnnouncementDto {
-    private Integer id;
+//   private Integer id;
 
-    @NotNull(message = "announcementTitle is required")
+    @NotNull
     @Size(min = 1, max = 200)
     private String announcementTitle;
 
-    @NotNull(message = "announcementDescription is required")
+    @NotNull
     @Size(min = 1, max = 10000)
     private String announcementDescription;
 
@@ -32,21 +34,23 @@ public class CreateAnnouncementDto {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime publishDate;
 
-    @Future(message = "must be a future date")
+    @Future(message = "closeDate must be a future date")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime closeDate;
 
-    @AssertTrue(message = "closeDate must be later than publishDate")
-    public boolean isCloseDateValid() {
-        if (closeDate == null || publishDate == null) {
-            return true; // Skip validation if either date is null
-        }
-        return closeDate.isAfter(publishDate);
-    }
-
+    @NotNull( message = "announcementDisplay must be 'Y' or 'N'")
     private AnnouncementDisplayEnum announcementDisplay = AnnouncementDisplayEnum.N;
 
     @NotNull
     private Integer categoryId;
 
+    public void setAnnouncementDisplay(String announcementDisplay) {
+        if(Objects.equals(announcementDisplay, "N")){
+            this.announcementDisplay = AnnouncementDisplayEnum.N;
+        }else if(Objects.equals(announcementDisplay, "Y")){
+            this.announcementDisplay = AnnouncementDisplayEnum.Y;
+        } else{
+            this.announcementDisplay = null;
+        }
+    }
 }

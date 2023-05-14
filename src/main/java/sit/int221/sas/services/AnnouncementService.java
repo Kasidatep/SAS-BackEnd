@@ -63,9 +63,7 @@ public class AnnouncementService {
         newAnnouncement.setCloseDate(announcement.getCloseDate());
         newAnnouncement.setAnnouncementDisplay(announcement.getAnnouncementDisplay());
         newAnnouncement.setCategory(category);
-       // EntityValidator.validateEntity(newAnnouncement);
-        DateValidator.isCorrect(announcement.getPublishDate(), announcement.getCloseDate());
-        try {
+       try {
             return modelMapper.map(announcementRepository.saveAndFlush(newAnnouncement),CreateAnnouncementReturnDto.class);
         } catch (ConstraintViolationException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -94,10 +92,7 @@ public class AnnouncementService {
             updateAnnouncement.setCloseDate(announcement.getCloseDate());
             updateAnnouncement.setAnnouncementDisplay(announcement.getAnnouncementDisplay());
             updateAnnouncement.setCategory(category);
-            EntityValidator.validateEntity(updateAnnouncement);
-            EntityValidator.validateEntity(updateAnnouncement.getCategory());
-            DateValidator.isCorrect(announcement.getPublishDate(), announcement.getCloseDate());
-        try {
+            try {
             return modelMapper.map(announcementRepository.saveAndFlush(updateAnnouncement),CreateAnnouncementReturnDto.class);
         } catch (DataIntegrityViolationException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
