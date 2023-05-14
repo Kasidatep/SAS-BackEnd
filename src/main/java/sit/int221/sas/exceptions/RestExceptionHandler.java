@@ -37,13 +37,13 @@ class ErrorResponse {
     private int status;
     private String message;
     private String path;
-    private List<ValidationError> errors;
+    private List<ValidationError> detail;
 
-    public ErrorResponse(int status, String message, String path, List<ValidationError> errors) {
+    public ErrorResponse(int status, String message, String path, List<ValidationError> detail) {
         this.status = status;
         this.message = message;
         this.path = path;
-        this.errors = errors;
+        this.detail = detail;
     }
 
     public int getStatus() {
@@ -70,12 +70,12 @@ class ErrorResponse {
         this.path = path;
     }
 
-    public List<ValidationError> getErrors() {
-        return errors;
+    public List<ValidationError> getDetail() {
+        return detail;
     }
 
-    public void setErrors(List<ValidationError> errors) {
-        this.errors = errors;
+    public void setDetail(List<ValidationError> detail) {
+        this.detail = detail;
     }
 }
 

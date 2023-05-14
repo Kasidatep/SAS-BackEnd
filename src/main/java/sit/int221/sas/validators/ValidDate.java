@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = CloseDateValidator.class)
 public @interface ValidDate {
-    String message() default "closeDate must be later than publishDate";
+    String message() default "must be later than publish date";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

@@ -45,7 +45,7 @@ public class Announcement {
 
     @JsonIgnore
     @ManyToOne
-    @NotNull(message = "Category can not be null")
+    @NotNull
     @JoinColumn(name = "categoryId")
     private Category category;
 }

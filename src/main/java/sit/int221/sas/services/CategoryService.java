@@ -47,4 +47,8 @@ public class CategoryService {
         }
 
     }
+
+    public boolean isExist(Integer id){
+        return categoryRepository.existsById(id);
+    }
 }
