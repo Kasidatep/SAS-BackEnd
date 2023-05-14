@@ -34,10 +34,10 @@ public class Announcement {
     @Size(max = 10000, message = "announcementDescription cannot be longer than 10,000 characters")
     private String announcementDescription;
 
-    @Future(message = "publishDate must future")
+    //@Future(message = "publishDate must future")
     private ZonedDateTime publishDate;
 
-    @Future(message = "closeDate must future")
+    //@Future(message = "closeDate must future")
     private ZonedDateTime closeDate;
     @Enumerated(EnumType.STRING)
     @Column(name = "announcementDisplay")

@@ -109,7 +109,12 @@ public class AnnouncementService {
         Integer categoryId = Integer.valueOf(category);
         Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size), Sort.by("id").descending());
         ZonedDateTime currentTime = ZonedDateTime.now();
-        if(Objects.equals(mode, "active")){
+        if(Objects.equals(mode, "admin")){
+            if(categoryId==0){
+                return toPageDTO(announcementRepository.findAll(pageable), AllAnnouncementDto.class, modelMapper);
+            }else{
+                return toPageDTO(announcementRepository.findAllByCategoryId(categoryId, pageable), AllAnnouncementDto.class, modelMapper);            }
+        } else if(Objects.equals(mode, "active")){
             if(categoryId==0){
                 return toPageDTO(announcementRepository.findActive(currentTime, pageable), AllAnnouncementDto.class, modelMapper);
             }else{

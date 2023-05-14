@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface AnnouncementRepository extends JpaRepository<Announcement, Integer> {
-    List<Announcement> findAllByCategory(String category);
+    Page<Announcement> findAllByCategoryId(Integer category, Pageable pageable);
 
     @Query("SELECT e FROM Announcement e WHERE "
             + "e.announcementDisplay = 'Y' AND ("

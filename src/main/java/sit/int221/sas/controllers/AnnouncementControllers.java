@@ -4,10 +4,7 @@ import jakarta.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import sit.int221.sas.dto.*;
@@ -53,7 +50,7 @@ public class AnnouncementControllers {
 
     @GetMapping("/pages")
     public PageDto<AllAnnouncementDto> getAllAnnouncementByPage(
-            @RequestParam(defaultValue = "active") String mode,
+            @RequestParam(defaultValue = "admin") String mode,
             @RequestParam(defaultValue = "0") String page,
             @RequestParam(defaultValue = "5") String size,
             @RequestParam(defaultValue = "0") String category
