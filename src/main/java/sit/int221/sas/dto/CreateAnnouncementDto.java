@@ -56,7 +56,9 @@ public class CreateAnnouncementDto {
             this.announcementDisplay = AnnouncementDisplayEnum.N;
         }else if(Objects.equals(announcementDisplay, "Y")){
             this.announcementDisplay = AnnouncementDisplayEnum.Y;
-        } else{
+        }else if(announcementDisplay==null){
+            this.announcementDisplay = AnnouncementDisplayEnum.N;
+    } else{
             this.announcementDisplay = null;
         }
     }
