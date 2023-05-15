@@ -1,35 +1,47 @@
 package sit.int221.sas.exceptions;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleValidationException(MethodArgumentNotValidException ex) {
-        List<ValidationError> errors = new ArrayList<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            if (error instanceof FieldError) {
-                String field = ((FieldError) error).getField();
-                String errorMessage = error.getDefaultMessage();
-                errors.add(new ValidationError(field, errorMessage));
-            } else {
-                String errorMessage = error.getDefaultMessage();
-                errors.add(new ValidationError("", errorMessage));
-            }
-        });
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public ErrorResponse handleValidationException(MethodArgumentNotValidException ex) {
+//        List<ValidationError> errors = new ArrayList<>();
+//        ex.getBindingResult().getAllErrors().forEach((error) -> {
+//            if (error instanceof FieldError) {
+//                String field = ((FieldError) error).getField();
+//                String errorMessage = error.getDefaultMessage();
+//                errors.add(new ValidationError(field, errorMessage));
+//            } else {
+//                String errorMessage = error.getDefaultMessage();
+//                errors.add(new ValidationError("", errorMessage));
+//            }
+//        });
+//
+//        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(),HttpStatus.BAD_REQUEST.getReasonPhrase() ,"", errors);
+//    }
 
-        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(),HttpStatus.BAD_REQUEST.getReasonPhrase() ,"", errors);
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex, WebRequest webRequest) {
+        List<ValidationError> errors = new ArrayList<>();
+        ex.getBindingResult().getFieldErrors().forEach((error) -> {
+            String field = error.getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.add(new ValidationError(field, errorMessage));
+        });
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), webRequest.getDescription(false).substring(4), errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 }
 
@@ -42,7 +54,7 @@ class ErrorResponse {
     public ErrorResponse(int status, String message, String path, List<ValidationError> detail) {
         this.status = status;
         this.message = message;
-        this.path = path;
+        this.path = String.valueOf(path);
         this.detail = detail;
     }
 
@@ -103,4 +115,7 @@ class ValidationError {
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
+
+
+
 }
