@@ -1,6 +1,5 @@
 package sit.int221.sas.services;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.hibernate.exception.ConstraintViolationException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,15 +9,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 import sit.int221.sas.dto.*;
 import sit.int221.sas.entities.Announcement;
 import sit.int221.sas.entities.Category;
-import sit.int221.sas.exceptions.DateValidator;
-import sit.int221.sas.exceptions.EntityValidator;
 import sit.int221.sas.repositories.AnnouncementRepository;
 
 import java.time.ZonedDateTime;
@@ -145,4 +140,13 @@ public class AnnouncementService {
         return page;
     }
 
+    public void countAnnouncement(Integer id) {
+        if(announcementRepository.existsById(id)){
+            Announcement announcement = announcementRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"The announcement is not found"));;
+            announcement.setView(announcement.getView()+1);
+            announcementRepository.saveAndFlush(announcement);
+        }else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The announcement is not found");
+        }
+    }
 }

@@ -25,23 +25,23 @@ public class Announcement {
     @Column(name = "announcementId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(name = "announcementTitle", nullable = false)
-    @NotBlank(message = "announcementTitle is required")
-    @Size(max = 200, message = "announcementTitle cannot be longer than 200 characters")
     private String announcementTitle;
+
     @Column(name = "announcementDescription", nullable = false)
-    @NotBlank(message = "announcementDescription is required")
-    @Size(max = 10000, message = "announcementDescription cannot be longer than 10,000 characters")
     private String announcementDescription;
 
-    //@Future(message = "publishDate must future")
     private ZonedDateTime publishDate;
 
-    //@Future(message = "closeDate must future")
     private ZonedDateTime closeDate;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "announcementDisplay")
     private AnnouncementDisplayEnum announcementDisplay;
+
+    @Column(name = "announcementView")
+    private Integer view;
 
     @JsonIgnore
     @ManyToOne

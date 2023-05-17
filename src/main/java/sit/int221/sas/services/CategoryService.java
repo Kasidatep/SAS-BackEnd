@@ -1,22 +1,14 @@
 package sit.int221.sas.services;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import sit.int221.sas.dto.CreateCategoryDto;
 import sit.int221.sas.entities.Category;
-import sit.int221.sas.exceptions.EntityValidator;
 import sit.int221.sas.repositories.CategoryRepository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class CategoryService {
@@ -39,7 +31,6 @@ public class CategoryService {
     public Category addCategory(CreateCategoryDto category) {
         Category category1 = new Category();
         category1.setCategoryName(category.getCategoryName());
-        EntityValidator.validateEntity(category1);
         if(!categoryRepository.existsCategoryByCategoryName(category1.getCategoryName())){
             return categoryRepository.saveAndFlush(category1);
         } else {

@@ -74,4 +74,8 @@ public class AnnouncementControllers {
         }
         return announcementService.addAnnouncement(announcement);
     }
+    @GetMapping("/{id}/count")
+    public void countAnnouncement  (@PathVariable Integer id){
+        announcementService.countAnnouncement(id);
+    }
 }
