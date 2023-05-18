@@ -32,6 +32,7 @@ public class RestExceptionHandler {
 //        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(),HttpStatus.BAD_REQUEST.getReasonPhrase() ,"", errors);
 //    }
 
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex, WebRequest webRequest) {
         List<ValidationError> errors = new ArrayList<>();

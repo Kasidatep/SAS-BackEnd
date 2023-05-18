@@ -4,7 +4,6 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import sit.int221.sas.dto.CreateAnnouncementDto;
 
-import java.time.ZonedDateTime;
 
 public class CloseDateValidator implements ConstraintValidator<ValidDate, CreateAnnouncementDto> {
     @Override

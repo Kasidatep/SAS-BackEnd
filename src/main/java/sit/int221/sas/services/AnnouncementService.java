@@ -28,6 +28,7 @@ public class AnnouncementService {
 
     @Autowired
     private CategoryService categoryService;
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -44,9 +45,14 @@ public class AnnouncementService {
         }
     }
 
-    public AnnouncementDetailDto getAnnouncementById(Integer id) {
-        Announcement announcement = announcementRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Announcement id " + id +" does not exist"));
-        return modelMapper.map(announcement, AnnouncementDetailDto.class);
+    public AnnouncementDetailDto getAnnouncementById(Integer id, boolean count) {
+        if(count){
+            return modelMapper.map(addAnnouncementCount(id), AnnouncementDetailDto.class);
+        }else{
+            Announcement announcement = announcementRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Announcement id " + id +" does not exist"));
+            return modelMapper.map(announcement, AnnouncementDetailDto.class);
+        }
+
     }
 
     public CreateAnnouncementReturnDto addAnnouncement(CreateAnnouncementDto announcement) {
@@ -58,6 +64,7 @@ public class AnnouncementService {
         newAnnouncement.setCloseDate(announcement.getCloseDate());
         newAnnouncement.setAnnouncementDisplay(announcement.getAnnouncementDisplay());
         newAnnouncement.setCategory(category);
+        newAnnouncement.setViewCount(0);
        try {
             return modelMapper.map(announcementRepository.saveAndFlush(newAnnouncement),CreateAnnouncementReturnDto.class);
         } catch (ConstraintViolationException e) {
@@ -127,6 +134,15 @@ public class AnnouncementService {
         return announcementRepository.findAll(pageable);
     }
 
+    public Announcement addAnnouncementCount(Integer id) {
+        if(announcementRepository.existsById(id)){
+            Announcement announcement = announcementRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"The announcement is not found"));;
+            announcement.setViewCount(announcement.getViewCount()+1);
+            return announcementRepository.saveAndFlush(announcement);
+        }else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The announcement is not found");
+        }
+    }
 
     // Dto Page
     public <S, T> List<T> mapList(List<S> source,  Class<T> targetClass, ModelMapper modelMapper) {
@@ -140,13 +156,5 @@ public class AnnouncementService {
         return page;
     }
 
-    public void countAnnouncement(Integer id) {
-        if(announcementRepository.existsById(id)){
-            Announcement announcement = announcementRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"The announcement is not found"));;
-            announcement.setView(announcement.getView()+1);
-            announcementRepository.saveAndFlush(announcement);
-        }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The announcement is not found");
-        }
-    }
+
 }

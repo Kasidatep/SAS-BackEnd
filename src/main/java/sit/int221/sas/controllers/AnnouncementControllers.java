@@ -26,8 +26,11 @@ public class AnnouncementControllers {
     }
 
     @GetMapping("/{id}")
-    public AnnouncementDetailDto getAnnouncementById(@PathVariable Integer id) {
-        return announcementService.getAnnouncementById(id);
+    public AnnouncementDetailDto getAnnouncementById(
+            @PathVariable Integer id,
+            @RequestParam(defaultValue = "false") boolean count
+    ) {
+        return announcementService.getAnnouncementById(id,count);
     }
 
 
@@ -58,14 +61,6 @@ public class AnnouncementControllers {
         return announcementService.getAllAnnouncementByPage(mode, page, size, category);
     }
 
-    @GetMapping("/page-test")
-    public Page<Announcement> getAllAnnouncementByPageTest(
-            @RequestParam String mode,
-            @RequestParam(defaultValue = "0") String page,
-            @RequestParam(defaultValue = "5") String size
-    ) {
-        return announcementService.getAllAnnouncementByPageTest(mode, page, size);
-    }
 
     @PostMapping("")
     public CreateAnnouncementReturnDto addAnnouncement(@Valid @RequestBody CreateAnnouncementDto announcement, BindingResult bindingResult) throws MethodArgumentNotValidException {
@@ -73,9 +68,5 @@ public class AnnouncementControllers {
             throw new MethodArgumentNotValidException((MethodParameter) null, bindingResult);
         }
         return announcementService.addAnnouncement(announcement);
-    }
-    @GetMapping("/{id}/count")
-    public void countAnnouncement  (@PathVariable Integer id){
-        announcementService.countAnnouncement(id);
     }
 }

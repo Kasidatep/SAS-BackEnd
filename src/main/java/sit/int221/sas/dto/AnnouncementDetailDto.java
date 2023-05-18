@@ -23,7 +23,7 @@ public class AnnouncementDetailDto {
         private ZonedDateTime publishDate;
         private ZonedDateTime closeDate;
         private AnnouncementDisplayEnum announcementDisplay;
-        private Integer announcementView;
+        private Integer viewCount;
         @JsonIgnore
         private Category category;
         public String getAnnouncementCategory() {

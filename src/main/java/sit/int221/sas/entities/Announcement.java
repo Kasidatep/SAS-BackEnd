@@ -40,8 +40,8 @@ public class Announcement {
     @Column(name = "announcementDisplay")
     private AnnouncementDisplayEnum announcementDisplay;
 
-    @Column(name = "announcementView")
-    private Integer view;
+    @Column(name = "viewCount")
+    private Integer viewCount;
 
     @JsonIgnore
     @ManyToOne
