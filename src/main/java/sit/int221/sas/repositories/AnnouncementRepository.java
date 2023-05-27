@@ -11,6 +11,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 @Repository
+
 public interface AnnouncementRepository extends JpaRepository<Announcement, Integer> {
     Page<Announcement> findAllByCategoryId(Integer category, Pageable pageable);
 

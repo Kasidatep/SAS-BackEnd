@@ -17,6 +17,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/announcements")
 public class AnnouncementControllers {
+
     @Autowired
     private AnnouncementService announcementService;
 
@@ -33,7 +34,6 @@ public class AnnouncementControllers {
         return announcementService.getAnnouncementById(id,count);
     }
 
-
     @PutMapping("/{id}")
     public CreateAnnouncementReturnDto updateAnnouncement(
             @PathVariable Integer id,
@@ -43,7 +43,6 @@ public class AnnouncementControllers {
         }else{
             return announcementService.updateAnnouncement(id, announcement);
         }
-
     }
 
     @DeleteMapping("/{id}")
@@ -54,13 +53,12 @@ public class AnnouncementControllers {
     @GetMapping("/pages")
     public PageDto<AllAnnouncementDto> getAllAnnouncementByPage(
             @RequestParam(defaultValue = "admin") String mode,
-            @RequestParam(defaultValue = "0") String page,
-            @RequestParam(defaultValue = "5") String size,
-            @RequestParam(defaultValue = "0") String category
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "5") Integer size,
+            @RequestParam(defaultValue = "0") Integer category
     ) {
         return announcementService.getAllAnnouncementByPage(mode, page, size, category);
     }
-
 
     @PostMapping("")
     public CreateAnnouncementReturnDto addAnnouncement(@Valid @RequestBody CreateAnnouncementDto announcement, BindingResult bindingResult) throws MethodArgumentNotValidException {

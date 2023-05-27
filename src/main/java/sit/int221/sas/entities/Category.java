@@ -22,8 +22,6 @@ public class Category {
     private Integer id;
 
     @Column(name = "categoryName", nullable = false, unique = true)
-    @NotBlank(message = "Category name is required")
-    @Size(max = 50, message = "Category name cannot be longer than 50 characters")
     private String categoryName;
 
 }

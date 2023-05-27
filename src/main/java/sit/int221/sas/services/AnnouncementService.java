@@ -4,7 +4,6 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,6 +14,7 @@ import sit.int221.sas.dto.*;
 import sit.int221.sas.entities.Announcement;
 import sit.int221.sas.entities.Category;
 import sit.int221.sas.repositories.AnnouncementRepository;
+import sit.int221.sas.utils.ListMapper;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -31,6 +31,9 @@ public class AnnouncementService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private ListMapper listMapper;
 
     public List<AllAnnouncementDto> getAllAnnouncements(String mode) {
         Sort sort = Sort.by("id").descending();
@@ -101,37 +104,30 @@ public class AnnouncementService {
         }
     }
 
-    public PageDto<AllAnnouncementDto> getAllAnnouncementByPage(String mode, String page, String size, String category) {
-        if(category.isBlank()) category = String.valueOf(0);
-        Integer categoryId = Integer.valueOf(category);
-        Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size), Sort.by("id").descending());
+    public PageDto<AllAnnouncementDto> getAllAnnouncementByPage(String mode, Integer page, Integer size, Integer categoryId) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         ZonedDateTime currentTime = ZonedDateTime.now();
         if(Objects.equals(mode, "admin")){
             if(categoryId==0){
-                return toPageDTO(announcementRepository.findAll(pageable), AllAnnouncementDto.class, modelMapper);
+                return listMapper.toPageDTO(announcementRepository.findAll(pageable), AllAnnouncementDto.class, modelMapper);
             }else{
-                return toPageDTO(announcementRepository.findAllByCategoryId(categoryId, pageable), AllAnnouncementDto.class, modelMapper);            }
+                return listMapper.toPageDTO(announcementRepository.findAllByCategoryId(categoryId, pageable), AllAnnouncementDto.class, modelMapper);            }
         } else if(Objects.equals(mode, "active")){
             if(categoryId==0){
-                return toPageDTO(announcementRepository.findActive(currentTime, pageable), AllAnnouncementDto.class, modelMapper);
+                return listMapper.toPageDTO(announcementRepository.findActive(currentTime, pageable), AllAnnouncementDto.class, modelMapper);
             }else{
-                return toPageDTO(announcementRepository.findActive(currentTime, categoryId, pageable), AllAnnouncementDto.class, modelMapper);
+                return listMapper.toPageDTO(announcementRepository.findActive(currentTime, categoryId, pageable), AllAnnouncementDto.class, modelMapper);
             }
         } else if(Objects.equals(mode, "close")){
             if(categoryId==0){
-                return toPageDTO(announcementRepository.findClosed(currentTime, pageable), AllAnnouncementDto.class, modelMapper);
+                return listMapper.toPageDTO(announcementRepository.findClosed(currentTime, pageable), AllAnnouncementDto.class, modelMapper);
             }else{
-                return toPageDTO(announcementRepository.findClosed(currentTime, categoryId, pageable), AllAnnouncementDto.class, modelMapper);
+                return listMapper.toPageDTO(announcementRepository.findClosed(currentTime, categoryId, pageable), AllAnnouncementDto.class, modelMapper);
             }
         }else{
 //            return toPageDTO(announcementRepository.findAll(pageable), AllAnnouncementDto.class, modelMapper);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mode "+ mode + " not provide.");
         }
-    }
-
-    public Page<Announcement> getAllAnnouncementByPageTest(String mode, String page, String size) {
-        Pageable pageable = PageRequest.of(Integer.valueOf(page), Integer.valueOf(size), Sort.by("id").descending());
-        return announcementRepository.findAll(pageable);
     }
 
     public Announcement addAnnouncementCount(Integer id) {
@@ -142,18 +138,6 @@ public class AnnouncementService {
         }else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The announcement is not found");
         }
-    }
-
-    // Dto Page
-    public <S, T> List<T> mapList(List<S> source,  Class<T> targetClass, ModelMapper modelMapper) {
-        return source.stream().map(entity -> modelMapper.map(entity, targetClass))
-                .collect(Collectors.toList());
-    }
-    public <S, T> PageDto<T> toPageDTO(Page<S> source, Class<T> targetClass,
-                                       ModelMapper modelMapper) {
-        PageDto<T> page = modelMapper.map(source, PageDto.class);
-        page.setContent(mapList(source.getContent(), targetClass, modelMapper));
-        return page;
     }
 
 

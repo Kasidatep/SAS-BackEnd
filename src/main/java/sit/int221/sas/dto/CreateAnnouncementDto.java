@@ -1,14 +1,11 @@
 package sit.int221.sas.dto;
 
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import org.springframework.validation.annotation.Validated;
-import sit.int221.sas.entities.Category;
+
 
 import sit.int221.sas.utils.AnnouncementDisplayEnum;
 import sit.int221.sas.validators.CategoryIdExists;
