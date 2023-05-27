@@ -60,12 +60,7 @@ public class AnnouncementService {
 
     public CreateAnnouncementReturnDto addAnnouncement(CreateAnnouncementDto announcement) {
         Category category = categoryService.getCategoryById(announcement.getCategoryId());
-        Announcement newAnnouncement = new Announcement();
-        newAnnouncement.setAnnouncementTitle(announcement.getAnnouncementTitle());
-        newAnnouncement.setAnnouncementDescription(announcement.getAnnouncementDescription());
-        newAnnouncement.setPublishDate(announcement.getPublishDate());
-        newAnnouncement.setCloseDate(announcement.getCloseDate());
-        newAnnouncement.setAnnouncementDisplay(announcement.getAnnouncementDisplay());
+        Announcement newAnnouncement = modelMapper.map(announcement, Announcement.class);
         newAnnouncement.setCategory(category);
         newAnnouncement.setViewCount(0);
        try {
@@ -125,7 +120,6 @@ public class AnnouncementService {
                 return listMapper.toPageDTO(announcementRepository.findClosed(currentTime, categoryId, pageable), AllAnnouncementDto.class, modelMapper);
             }
         }else{
-//            return toPageDTO(announcementRepository.findAll(pageable), AllAnnouncementDto.class, modelMapper);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mode "+ mode + " not provide.");
         }
     }
