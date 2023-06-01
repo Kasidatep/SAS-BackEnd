@@ -38,11 +38,11 @@ public class AnnouncementService {
     public List<AllAnnouncementDto> getAllAnnouncements(String mode) {
         Sort sort = Sort.by("id").descending();
         if(Objects.equals(mode, "admin")){
-            return announcementRepository.findAll(sort).stream().map(c -> modelMapper.map(c, AllAnnouncementDto.class)).collect(Collectors.toList());
+            return listMapper.mapList(announcementRepository.findAll(sort), AllAnnouncementDto.class, modelMapper);
         } else if(Objects.equals(mode, "active")){
-            return announcementRepository.findActive(ZonedDateTime.now()).stream().map(c -> modelMapper.map(c, AllAnnouncementDto.class)).collect(Collectors.toList());
+            return listMapper.mapList(announcementRepository.findActive(ZonedDateTime.now()), AllAnnouncementDto.class, modelMapper);
         } else if (Objects.equals(mode, "close")) {
-            return announcementRepository.findClosed(ZonedDateTime.now()).stream().map(c -> modelMapper.map(c, AllAnnouncementDto.class)).collect(Collectors.toList());
+            return listMapper.mapList(announcementRepository.findClosed(ZonedDateTime.now()), AllAnnouncementDto.class, modelMapper);
         }else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Mode "+ mode+ " not define.");
         }
