@@ -70,19 +70,6 @@ public class AnnouncementService {
         }
     }
 
-    public void deleteAnnouncement(Integer id) {
-        if(announcementRepository.existsById(id)){
-            try {
-                announcementRepository.deleteById(id);
-            } catch (DataIntegrityViolationException e) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-            }
-        }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The announcement is not found");
-        }
-
-    }
-
     public CreateAnnouncementReturnDto updateAnnouncement(Integer id, CreateAnnouncementDto announcement){
             Announcement updateAnnouncement =  announcementRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"The announcement is not found"));
             Category category = categoryService.getCategoryById(announcement.getCategoryId());
@@ -97,6 +84,19 @@ public class AnnouncementService {
         } catch (DataIntegrityViolationException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+    }
+
+    public void deleteAnnouncement(Integer id) {
+        if(announcementRepository.existsById(id)){
+            try {
+                announcementRepository.deleteById(id);
+            } catch (DataIntegrityViolationException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            }
+        }else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The announcement is not found");
+        }
+
     }
 
     public PageDto<AllAnnouncementDto> getAllAnnouncementByPage(String mode, Integer page, Integer size, Integer categoryId) {
@@ -126,7 +126,7 @@ public class AnnouncementService {
 
     public Announcement addAnnouncementCount(Integer id) {
         if(announcementRepository.existsById(id)){
-            Announcement announcement = announcementRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"The announcement is not found"));;
+            Announcement announcement = announcementRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"The announcement is not found"));
             announcement.setViewCount(announcement.getViewCount()+1);
             return announcementRepository.saveAndFlush(announcement);
         }else{

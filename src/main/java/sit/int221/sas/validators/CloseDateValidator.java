@@ -11,7 +11,6 @@ public class CloseDateValidator implements ConstraintValidator<ValidDate, Create
         if (dto.getCloseDate() == null || dto.getPublishDate() == null) {
             return true; // Skip validation if either date is null
         }
-//        return dto.getCloseDate().isAfter(dto.getPublishDate());
         boolean isValid = dto.getCloseDate().isAfter(dto.getPublishDate());
         if (!isValid) {
             context.disableDefaultConstraintViolation();

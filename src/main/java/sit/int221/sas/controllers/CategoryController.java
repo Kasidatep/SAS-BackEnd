@@ -14,7 +14,7 @@ import sit.int221.sas.services.CategoryService;
 
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://intproj22.sit.kmutt.ac.th")
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
@@ -33,7 +33,9 @@ public class CategoryController {
     }
 
     @PostMapping("")
-    public Category CategoryDTO(@Valid  @RequestBody CreateCategoryDto category, BindingResult bindingResult) throws MethodArgumentNotValidException {
+    public Category CategoryDTO(
+            @Valid  @RequestBody CreateCategoryDto category,
+            BindingResult bindingResult) throws MethodArgumentNotValidException {
         if (bindingResult.hasErrors()) {
             throw new MethodArgumentNotValidException((MethodParameter) null, bindingResult);
         }else{

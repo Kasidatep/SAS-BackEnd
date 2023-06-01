@@ -3,17 +3,15 @@ package sit.int221.sas.controllers;
 import jakarta.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
-import org.springframework.data.domain.Page;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import sit.int221.sas.dto.*;
-import sit.int221.sas.entities.Announcement;
 import sit.int221.sas.services.AnnouncementService;
 
 import java.util.*;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://intproj22.sit.kmutt.ac.th")
 @RestController
 @RequestMapping("/api/announcements")
 public class AnnouncementControllers {
@@ -34,22 +32,6 @@ public class AnnouncementControllers {
         return announcementService.getAnnouncementById(id,count);
     }
 
-    @PutMapping("/{id}")
-    public CreateAnnouncementReturnDto updateAnnouncement(
-            @PathVariable Integer id,
-            @Valid @RequestBody CreateAnnouncementDto announcement, BindingResult bindingResult) throws MethodArgumentNotValidException {
-        if (bindingResult.hasErrors()) {
-            throw new MethodArgumentNotValidException((MethodParameter) null, bindingResult);
-        }else{
-            return announcementService.updateAnnouncement(id, announcement);
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteAnnouncement(@PathVariable Integer id) {
-        announcementService.deleteAnnouncement(id);
-    }
-
     @GetMapping("/pages")
     public PageDto<AllAnnouncementDto> getAllAnnouncementByPage(
             @RequestParam(defaultValue = "admin") String mode,
@@ -61,10 +43,29 @@ public class AnnouncementControllers {
     }
 
     @PostMapping("")
-    public CreateAnnouncementReturnDto addAnnouncement(@Valid @RequestBody CreateAnnouncementDto announcement, BindingResult bindingResult) throws MethodArgumentNotValidException {
+    public CreateAnnouncementReturnDto addAnnouncement(
+            @Valid @RequestBody CreateAnnouncementDto announcement,
+            BindingResult bindingResult) throws MethodArgumentNotValidException {
         if (bindingResult.hasErrors()) {
             throw new MethodArgumentNotValidException((MethodParameter) null, bindingResult);
         }
         return announcementService.addAnnouncement(announcement);
+    }
+
+    @PutMapping("/{id}")
+    public CreateAnnouncementReturnDto updateAnnouncement(
+            @PathVariable Integer id,
+            @Valid @RequestBody CreateAnnouncementDto announcement,
+            BindingResult bindingResult) throws MethodArgumentNotValidException {
+        if (bindingResult.hasErrors()) {
+            throw new MethodArgumentNotValidException((MethodParameter) null, bindingResult);
+        }else{
+            return announcementService.updateAnnouncement(id, announcement);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteAnnouncement(@PathVariable Integer id) {
+        announcementService.deleteAnnouncement(id);
     }
 }
